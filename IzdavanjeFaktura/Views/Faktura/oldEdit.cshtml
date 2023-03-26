@@ -1,0 +1,227 @@
+﻿@model IzdavanjeFaktura.Models.Faktura
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Izmjena fakture</h1>
+
+<h4>Faktura</h4>
+<hr />
+<div class="col-md-12">
+    <form id="FakturaForm" enctype="multipart/form-data" asp-action="Edit">
+
+        <input type="hidden" asp-for="Id" />
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="BrojFakture" class="control-label"></label>
+            <input asp-for="BrojFakture" class="form-control" />
+            <span asp-validation-for="BrojFakture" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DatumStvaranjaFakture" class="control-label"></label>
+            <input asp-for="DatumStvaranjaFakture" class="form-control" />
+            <span asp-validation-for="DatumStvaranjaFakture" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DatumDospijecaFakture" class="control-label"></label>
+            <input asp-for="DatumDospijecaFakture" class="form-control" />
+            <span asp-validation-for="DatumDospijecaFakture" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="UkupnaCijenaBezPoreza" class="control-label"></label>
+            <input asp-for="UkupnaCijenaBezPoreza" class="form-control" />
+            <span asp-validation-for="UkupnaCijenaBezPoreza" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="UkupnaCijenaSaPorezom" class="control-label"></label>
+            <input asp-for="UkupnaCijenaSaPorezom" class="form-control" />
+            <span asp-validation-for="UkupnaCijenaSaPorezom" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="StvarateljRacuna" class="control-label"></label>
+            <input asp-for="StvarateljRacuna" class="form-control" />
+            <span asp-validation-for="StvarateljRacuna" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PrimateljRacuna" class="control-label"></label>
+            <input asp-for="PrimateljRacuna" class="form-control" />
+            <span asp-validation-for="PrimateljRacuna" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-12 p-0 m-0 bg-light">
+            <table id="StavkeTable" class="table table-sm CodesTable">
+                <thead>
+                    <tr>
+                        <th>
+                            Broj stavke
+                        </th>
+                        <th>
+                            Kolicina prodane stavke
+                        </th>
+                        <th>
+                            Jedinicna cijena stavke bez poreza
+                        </th>
+                        <th>
+                            Ukupna cijena stavke bez poreza
+                        </th>
+
+                        <th style="width:75px;">
+                            <button id="btnaddStavke" type="button" class="btn btn-sm btn-secondary visible"
+                                    onclick="AddStavke(this)">
+                                Dodaj
+                            </button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @*@foreach (var item in Model.FakturaStavki)*@
+                    @for (int i = 0; i < Model.FakturaStavki.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                <input asp-for="@Model.FakturaStavki[i].BrojStavke" class="form-control" />
+                            </td>
+                            <td>
+                                <input asp-for="@Model.FakturaStavki[i].KolicinaProdaneStavke" class="form-control" />
+                            </td>
+                            <td>
+                                <input asp-for="@Model.FakturaStavki[i].JedinicnaCijenaStavkeBezPoreza" class="form-control" />
+                            </td>
+                            <td>
+
+                                <input type="hidden" asp-for="@Model.FakturaStavki[i].IsDeleted" />
+                                <input asp-for="@Model.FakturaStavki[i].UkupnaCijenaStavkeBezPoreza" class="form-control" />
+                                @*<span asp-asp-validation-for="@Model.FakturaStavki[i].UkupnaCijenaStavkeBezPoreza" class="text-danger"></span>*@
+                            </td>
+
+                            <td style="width:60px;">
+
+                                <button id='btnremove-@i' type="button" class="btn btn-sm btn-danger visible"
+                                    onclick="DeleteStavke(this)">
+                                    Izbriši
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+
+        <input type="hidden" id="hdnLastIndex" value="0" />
+
+
+
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+
+    </form>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+
+    <script>
+
+        function DeleteStavke(btn) {
+
+            var table = document.getElementById('StavkeTable');
+            var rows = table.getElementsByTagName('tr');
+            if (rows.length == 2) {
+                alert("Ovaj red se ne može izbrisati");
+                return;
+            }
+
+            var btnIdx = btn.id.replaceAll('btnremove-', '');
+            var idofIsDeleted = btnIdx + "__IsDeleted";
+
+            var hidIsDelId = document.querySelector("[id$='" + idofIsDeleted + "']").id;
+
+            document.getElementById(hidIsDelId).value = "true";
+
+
+            //$(btn).closest('tr').remove();
+
+            $(btn).closest('tr').hide();
+
+        }
+
+        function AddStavke(btn) {
+
+            var table = document.getElementById('StavkeTable');
+            var rows = table.getElementsByTagName('tr');
+
+            //get the last row of StavkeTable
+            var rowOuterHtml = rows[rows.length - 1].outerHTML;
+
+            var lastrowIdx = rows.length - 2;
+
+            //convert stored string to number
+            var nextrowIdx = eval(lastrowIdx) + 1;
+
+            //assign new index to hidden control
+            document.getElementById('hdnLastIndex').value = nextrowIdx;
+
+            //rowOuterHtml hold the source of the last row, and raplace old index to new one
+            rowOuterHtml = rowOuterHtml.replaceAll('_' + lastrowIdx + '_', '_' + nextrowIdx + '_');
+            rowOuterHtml = rowOuterHtml.replaceAll('[' + lastrowIdx + ']', '[' + nextrowIdx + ']');
+            rowOuterHtml = rowOuterHtml.replaceAll('-' + lastrowIdx, '-' + nextrowIdx);
+
+            //attach new row to the table
+            var newRow = table.insertRow();
+            newRow.innerHTML = rowOuterHtml;
+
+            rebindvalidators();
+
+            var x = document.getElementsByTagName("INPUT");
+
+            for (var cnt = 0; cnt < x.length; cnt++) {
+                if (x[cnt].type == "text" && x[cnt].id.indexOf('_' + nextrowIdx + '_') > 0)
+                    x[cnt].value = '';
+                else if (x[cnt].type == "number" && x[cnt].id.indexOf('_' + nextrowIdx + '_') > 0)
+                    x[cnt].value = 0;
+            }
+
+            //show hide buttons
+            //var btnAddId = btn.id;
+            //var btnDeleteId = btnAddId.replaceAll('btnaddStavke', 'btnremove');
+
+            //var delbtn = document.getElements(btnDeleteId);
+            //delbtn.classList.add("visible");
+            //delbtn.classList.remove("invisible");
+
+            //var addbtn = document.getElementById(btnAddId);
+            //addbtn.classList.remove("visible");
+            //addbtn.classList.add("invisible");
+
+
+
+        }
+        function rebindvalidators() {
+
+            //Provjeriti ovaj id #FakturaForm gdje da primjenimo u primjeru #ApplicationForm
+            var $form = $("#FakturaForm");
+
+            $form.unbind();
+
+            $form.data("validator", null);
+
+            $.validator.unobtrusive.parse($form);
+
+            $form.validate($form.data("unobtrusiveValidation").options);
+        }
+
+
+    </script>
+
+    }

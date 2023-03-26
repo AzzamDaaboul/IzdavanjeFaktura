@@ -1,0 +1,53 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+
+
+.CodesTable table {
+    width: 100%
+}
+
+.CodesTable thead {
+    width: calc(100%-1em);
+}
+
+.CodesTable tbody {
+    display: block;
+    height: 140px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+    .CodesTable thead, .CodesTable tbody tr {
+        display: table;
+        width: 98%;
+        table-layout: fixed;
+    }
+
+.CodesTable thead, .CodesTable tbody, .CodesTable tr {
+    border: none !important
+}
+
+.UkupnaCijenaStavkeBezPoreza {
+    background-image: none;
+}
+
+.form label {
+    font-weight: bold
+}

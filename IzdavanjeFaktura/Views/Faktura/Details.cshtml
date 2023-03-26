@@ -1,0 +1,120 @@
+﻿@model IzdavanjeFaktura.Models.Faktura
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h4>Detalji fakture</h4>
+<hr />
+<form class="form" enctype="multipart/form-data" asp-action="Create">
+    <div class="row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="BrojFakture" class="control-label"></label>
+                <input asp-for="@Model.BrojFakture" class="form-control-plaintext" readonly />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="DatumStvaranjaFakture" class="control-label"></label>
+                <input asp-for="@Model.DatumStvaranjaFakture" class="form-control-plaintext" readonly />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="DatumDospijecaFakture" class="control-label"></label>
+                <input asp-for="@Model.DatumDospijecaFakture" class="form-control-plaintext" readonly />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="UkupnaCijenaBezPoreza" class="control-label"></label>
+                <input asp-for="@Model.UkupnaCijenaBezPoreza" class="form-control-plaintext" readonly />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="UkupnaCijenaSaPorezom" class="control-label"></label>
+                <input asp-for="@Model.UkupnaCijenaSaPorezom" class="form-control-plaintext" readonly />
+
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="StvarateljRacuna" class="control-label"></label>
+                <input asp-for="@Model.StvarateljRacuna" class="form-control-plaintext" readonly />
+
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="PrimateljRacuna" class="control-label"></label>
+                <input asp-for="@Model.PrimateljRacuna" class="form-control-plaintext" readonly />
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <table id="StavkeTable" class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th>
+                            Broj stavke
+                        </th>
+                        <th>
+                            Kolicina prodane stavke
+                        </th>
+                        <th>
+                            Jedinicna cijena stavke bez poreza
+                        </th>
+                        <th>
+                            Ukupna cijena stavke bez poreza
+                        </th>
+
+                        <th></th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.FakturaStavki.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                <input asp-for="@Model.FakturaStavki[i].BrojStavke" class="form-control-plaintext" readonly />
+                            </td>
+                            <td>
+                                <input asp-for="@Model.FakturaStavki[i].KolicinaProdaneStavke" class="form-control-plaintext" readonly />
+                            </td>
+                            <td>
+                                <input asp-for="@Model.FakturaStavki[i].JedinicnaCijenaStavkeBezPoreza" class="form-control-plaintext" readonly />
+                            </td>
+                            <td>
+                                <input asp-for="@Model.FakturaStavki[i].UkupnaCijenaStavkeBezPoreza" class="form-control-plaintext" readonly />
+                            </td>
+
+                            <td>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <input type="hidden" id="hdnLastIndex" value="0" />
+
+    </div>
+</form>
+
+<div class="col-12">
+    <div class="col-6 form-group text-right p-2">
+        <a asp-action="Index" class="btn btn-secondary">Nazad na listu</a>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+
+}

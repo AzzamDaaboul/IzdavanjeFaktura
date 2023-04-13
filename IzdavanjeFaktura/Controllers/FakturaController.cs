@@ -52,7 +52,7 @@ namespace IzdavanjeFaktura.Controllers
             {
                 faktura.UkupnaCijenaSaPorezom = faktura.UkupnaCijenaBezPoreza + faktura.UkupnaCijenaBezPoreza * (decimal)0.17;
             }
-            else if(Tax == 2)
+            else if (Tax == 2)
             {
                 faktura.UkupnaCijenaSaPorezom = faktura.UkupnaCijenaBezPoreza + faktura.UkupnaCijenaBezPoreza * (decimal)0.25;
             }

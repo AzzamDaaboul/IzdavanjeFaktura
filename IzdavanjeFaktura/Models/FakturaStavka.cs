@@ -22,17 +22,17 @@ namespace IzdavanjeFaktura.Models
         [Display(Name = "Kolicina prodane stavke")]
         public int KolicinaProdaneStavke { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:0.000}", ApplyFormatInEditMode = true)]
-        [Column(TypeName = "smallmoney")]
+        //[DisplayFormat(DataFormatString = "{0:0.000}", ApplyFormatInEditMode = true)]
+        //[Column(TypeName = "smallmoney")]
         [Required]
         [Display(Name = "Jedinicna cijena stavke bez poreza")]
-        public decimal JedinicnaCijenaStavkeBezPoreza { get; set; }
+        public int JedinicnaCijenaStavkeBezPoreza { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:0.000}", ApplyFormatInEditMode = true)]
-        [Column(TypeName = "smallmoney")]
+        //[DisplayFormat(DataFormatString = "{0:0.000}", ApplyFormatInEditMode = true)]
+        //[Column(TypeName = "smallmoney")]
         [Required]
         [Display(Name = "Ukupna cijena stavke bez poreza")]
-        public decimal UkupnaCijenaStavkeBezPoreza { get; set; }
+        public int UkupnaCijenaStavkeBezPoreza { get; set; }
 
         [ForeignKey("Faktura")]
         public int FakturaId { get; set; }

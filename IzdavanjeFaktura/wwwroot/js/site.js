@@ -1,15 +1,11 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
-
-function hasClass(elem, className) {
+﻿function hasClass(elem, className) {
     return elem.classList.contains(className);
 }
 
 function CalcUkupnaCijenaBezPoreza() {
     var x = document.getElementsByClassName("UkupnaCijenaStavkeBezPoreza");
-    //var totalExp = 0;
+    var kolicinaProdaneStavke = document.getElementsByClassName("KolicinaProdaneStavke");
+    var jedinicnaCijenaStavkeBezPoreza = document.getElementsByClassName("JedinicnaCijenaStavkeBezPoreza");
     var ukupnoBezPoreza = 0;
     var ukupnoSaPorezom = 0;
     var ukupnaCijenaStavkeBezPoreza = 0;
@@ -17,10 +13,13 @@ function CalcUkupnaCijenaBezPoreza() {
 
     for (i = 0; i < x.length; i++) {
 
+        var btnRemove = "btnremove-" + i;
+
         var idofIsDeleted = i + "__IsDeleted";
         var hidIsDelId = document.querySelector("[id$='" + idofIsDeleted + "']").id;
         var ukupnoSaDec;
-        if (document.getElementById(hidIsDelId).value != "true")
+        x[i].value = eval(kolicinaProdaneStavke[i].value) * eval(jedinicnaCijenaStavkeBezPoreza[i].value);
+        if (document.getElementById(btnRemove).value != "true")
             ukupnoBezPoreza = ukupnoBezPoreza + eval(x[i].value);
 
         //Drugi nacin za racunanje poreza, medjutim ovaj dio je uradjen u controlleru za Create i Edit metodu (HttpPost)
@@ -32,66 +31,67 @@ function CalcUkupnaCijenaBezPoreza() {
     }
 
     document.getElementById('UkupnaCijenaBezPoreza').value = ukupnoBezPoreza;
-    //document.getElementById('UkupnaCijenaSaPorezom').value = ukupnoSaDec;
 
     return;
 }
 
 document.addEventListener('change', function (e) {
-    if (hasClass(e.target, 'UkupnaCijenaStavkeBezPoreza')) {
+    if (hasClass(e.target, 'JedinicnaCijenaStavkeBezPoreza')) {
+        CalcUkupnaCijenaBezPoreza();
+    }
+    else if (hasClass(e.target, 'KolicinaProdaneStavke')) {
         CalcUkupnaCijenaBezPoreza();
     }
 }, false);
 
 function DeleteStavke(btn) {
     var table = document.getElementById('StavkeTable');
+    var counterRows = document.getElementById('counterRows');
+
     var rows = table.getElementsByTagName('tr');
-    if (rows.length == 2) {
+
+    if (counterRows.value == 2) {
         alert("Ovaj red se ne može izbrisati");
         return;
     }
-    $(btn).closest('tr').remove();
+
+    counterRows.value = eval(counterRows.value) - 1;
+
+    var btnIdx = btn.id.replaceAll('btnremove-', '');
+
+    var idOfIsDeleted = btnIdx + "__IsDeleted";
+
+    var hidIsDelId = document.querySelector("[id$='" + idOfIsDeleted + "']").id;
+
+    var btnRemove = "btnremove-" + btnIdx;
+    document.getElementById(btnRemove).value = "true";
+
+    document.getElementById(hidIsDelId).value = "true";
+    $(btn).closest('tr').hide();
 
     CalcUkupnaCijenaBezPoreza();
-
 }
-
-//function DeleteStavkeEdit(btn) {
-
-//    var table = document.getElementsById('StavkeTable');
-//    var rows = table.getElementsByTagName('tr');
-//    if (rows.length == 2) {
-//        alert("Ovaj red se ne može izbrisati");
-//        return;
-//    }
-
-//    var btnIdx = btn.id.replaceAll('btnremove-@i', '');
-//    var idofIsDeleted = btnIdx + "__IsDeleted";
-
-//    var hidIsDelId = document.querySelector("[id$='" + idofIsDeleted + "']").id;
-
-//    document.getElementById(hidIsDelId).value = "true";
-
-//    //$(btn).closest('tr').remove();
-
-//    $(btn).closest('tr').hide();
-//}
 
 function AddStavke(btn) {
 
     var table = document.getElementById('StavkeTable');
     var rows = table.getElementsByTagName('tr');
 
-    //get the last row of StavkeTable
-    var rowOuterHtml = rows[rows.length - 1].outerHTML;
+    var counterRows = document.getElementById('counterRows');
+    counterRows.value = eval(counterRows.value) + 1;
 
-    var lastrowIdx = rows.length - 2;
+    var lastrowIdx = rows.length - 1;
+
+    //get the last row of StavkeTable
+    var rowOuterHtml = rows[lastrowIdx].outerHTML;
+
+    lastrowIdx = lastrowIdx - 1;
 
     //convert stored string to number
     var nextrowIdx = eval(lastrowIdx) + 1;
 
-    //assign new index to hidden control
-    document.getElementById('hdnLastIndex').value = nextrowIdx;
+    console.log('Last Row Idx = ' + lastrowIdx);
+    console.log('Next Row Idx = ' + nextrowIdx);
 
     //rowOuterHtml hold the source of the last row, and raplace old index to new one
     rowOuterHtml = rowOuterHtml.replaceAll('_' + lastrowIdx + '_', '_' + nextrowIdx + '_');
@@ -100,36 +100,25 @@ function AddStavke(btn) {
 
     //attach new row to the table
     var newRow = table.insertRow();
+
     newRow.innerHTML = rowOuterHtml;
 
-    rebindvalidatiors();
+    var btnRemove = "btnremove-" + nextrowIdx;
+    document.getElementById(btnRemove).value = "false";
 
-    var x = document.getElementsByTagName("INPUT");
+    document.getElementById("FakturaStavki_" + nextrowIdx + "__IsDeleted").value = false;
 
-    for (var cnt = 0; cnt < x.length; cnt++) {
-        document.getElementsByClassName("BrojStavke").value += 1;
-        if (x[cnt].type == "text" && x[cnt].id.indexOf('_' + nextrowIdx + '_') > 0)
-            x[cnt].value = '';
-        else if (x[cnt].type == "number" && x[cnt].id.indexOf('_' + nextrowIdx + '_') > 0)
-            x[cnt].value = 0;
-    }
+    //Setting default value for a new row, to be 0.
+    document.getElementById("brojStavke-" + nextrowIdx).value = "0";
+    document.getElementById("kolicinaProdaneStavke-" + nextrowIdx).value = "0";
+    document.getElementById("jedinicnaCijenaStavkeBezPoreza-" + nextrowIdx).value = "0";
+    document.getElementById("ukupnaCijenaStavkeBezPoreza-" + nextrowIdx).value = "0";
 
-    //show hide buttons
-    var btnAddId = btn.id;
-    var btnDeleteId = btnAddId.replaceAll('btnaddStavke', 'btnremove');
-
-    var delbtn = document.getElementById(btnDeleteId);
-    delbtn.classList.add("visible");
-    delbtn.classList.remove("invisible");
-
-    var addbtn = document.getElementById(btnAddId);
-    addbtn.classList.remove("visible");
-    addbtn.classList.add("invisible");
+    rebindvalidators();
 }
 
 function rebindvalidators() {
 
-    //Provjeriti ovaj id #FakturaForm gdje da primjenimo u primjeru #ApplicationForm
     var $form = $("#FakturaForm");
 
     $form.unbind();

@@ -12,7 +12,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label asp-for="BrojFakture" class="control-label"></label>
-                <input asp-for="@Model.BrojFakture" class="form-control-plaintext" readonly />
+                <input asp-for="@Model.BrojFakture" class="form-control-plaintext" type="text" readonly />
             </div>
         </div>
         <div class="col-md-6">
@@ -30,7 +30,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label asp-for="UkupnaCijenaBezPoreza" class="control-label"></label>
-                <input asp-for="@Model.UkupnaCijenaBezPoreza" class="form-control-plaintext" readonly />
+                <input asp-for="@Model.UkupnaCijenaBezPoreza" class="form-control-plaintext" type="text" readonly />
             </div>
         </div>
         <div class="col-md-6">
@@ -80,18 +80,17 @@
                     {
                         <tr>
                             <td>
-                                <input asp-for="@Model.FakturaStavki[i].BrojStavke" class="form-control-plaintext" readonly />
+                                <input asp-for="@Model.FakturaStavki[i].BrojStavke" class="form-control-plaintext" type="text" readonly />
                             </td>
                             <td>
-                                <input asp-for="@Model.FakturaStavki[i].KolicinaProdaneStavke" class="form-control-plaintext" readonly />
+                                <input asp-for="@Model.FakturaStavki[i].KolicinaProdaneStavke" class="form-control-plaintext" type="text" readonly />
                             </td>
                             <td>
-                                <input asp-for="@Model.FakturaStavki[i].JedinicnaCijenaStavkeBezPoreza" class="form-control-plaintext" readonly />
+                                <input asp-for="@Model.FakturaStavki[i].JedinicnaCijenaStavkeBezPoreza" class="form-control-plaintext" type="text" readonly />
                             </td>
                             <td>
-                                <input asp-for="@Model.FakturaStavki[i].UkupnaCijenaStavkeBezPoreza" class="form-control-plaintext" readonly />
+                                <input asp-for="@Model.FakturaStavki[i].UkupnaCijenaStavkeBezPoreza" class="form-control-plaintext" type="text" readonly />
                             </td>
-
                             <td>
                             </td>
                         </tr>
@@ -115,6 +114,4 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
-
 }

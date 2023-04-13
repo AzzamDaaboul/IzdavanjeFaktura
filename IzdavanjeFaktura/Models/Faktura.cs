@@ -23,14 +23,14 @@ namespace IzdavanjeFaktura.Models
         [Display(Name = "Datum dospijeca fakture")]
         public DateTime DatumDospijecaFakture { get; set; } = DateTime.Now;
 
-        [DisplayFormat(DataFormatString = "{0:0.000}", ApplyFormatInEditMode = true)]
-        [Column(TypeName = "smallmoney")]
+        //[DisplayFormat(DataFormatString = "{0:0.000}", ApplyFormatInEditMode = true)]
+        //[Column(TypeName = "smallmoney")]
         [Required]
         [Display(Name = "Ukupna cijena bez poreza")]
-        public decimal UkupnaCijenaBezPoreza { get; set; }
+        public int UkupnaCijenaBezPoreza { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:0.000}", ApplyFormatInEditMode = true)]
-        [Column(TypeName = "smallmoney")]
+        //[DisplayFormat(DataFormatString = "{0:0.000}", ApplyFormatInEditMode = true)]
+        //[Column(TypeName = "smallmoney")]
         [Required]
         [Display(Name = "Ukupna cijena sa porezom")]
         public decimal UkupnaCijenaSaPorezom { get; set; }
